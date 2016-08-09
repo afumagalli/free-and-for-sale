@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -15,9 +16,11 @@ import httplib2
 import json
 import requests
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+PATH_TO_APP = '/var/www/catalog/catalog/'
 
-engine = create_engine('sqlite:///itemscatalog.db')
+CLIENT_ID = json.loads(open(PATH_TO_APP + 'client_secrets.json', 'r').read())['web']['client_id']
+
+engine = create_engine('postgresql://catalog:passwd@localhost/catalog')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -70,7 +73,7 @@ def gconnect():
     code = request.data
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(PATH_TO_APP + 'client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -252,6 +255,5 @@ def catalogJSON():
 
 
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
