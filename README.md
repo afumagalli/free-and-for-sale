@@ -5,6 +5,6 @@ This is a server side web app that maintains a catalog of items that users can p
 
 To run the app:
 
-1) If no database currently exists in the directory, run `python database_setup.py`
-2) Once the database is initialized, run `python main.py` to start the server
-3) Navigate to `http://localhost:5000` or `http://0.0.0.0:5000` to begin using the app
+1) If no database currently exists in the directory, run `python database_setup.py`  
+2) Once the database is initialized, run `python main.py` to start the server  
+3) Navigate to `http://localhost:5000` or `http://0.0.0.0:5000` to begin using the app  
